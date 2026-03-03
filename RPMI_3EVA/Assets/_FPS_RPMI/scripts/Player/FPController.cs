@@ -32,7 +32,7 @@ public class FPController : MonoBehaviour
     // variables de ref privadas
 
     Rigidbody rb; //ref rigidbody
-    Animator anim;
+    Animator anim; //ref animator
 
     //variables inputs
     Vector2 moveInput;
@@ -145,6 +145,7 @@ public class FPController : MonoBehaviour
         {
 
             isCrouching = !isCrouching;
+            anim.SetBool("isCrouching", isCrouching);
 
          }
     }
