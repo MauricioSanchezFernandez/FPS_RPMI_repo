@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,7 @@ public class GunSystem : MonoBehaviour
     #region General Variables
     [Header("General References")]
     [SerializeField] Camera fpsCam; //ref si disparamos desde el centro de la camara
-    //[SerializeField] Transform shootPoint; //ref si queremos disparar punta del cañon
+    [SerializeField] Transform shootPoint; //ref si queremos disparar punta del cañon
     [SerializeField] LayerMask impactLayer; //layer con la que el raycast interactua
     RaycastHit hit; //almacen de informacion de los objetos puede impactar
 
@@ -48,7 +49,12 @@ public class GunSystem : MonoBehaviour
      
     void Update()
     {
-        
+        //condicion extricta de llamar a la rutina de disparo
+
+        if (canShoot && shooting && !reloading && bulletsLeft > 0)
+        {
+            StartCoroutine(ShootRoutine());
+        }
     }
 
 
@@ -79,18 +85,71 @@ public class GunSystem : MonoBehaviour
 
     }
 
+    void Reload()
+    {
+        if (bulletsLeft < ammoSize && !reloading) StartCoroutine(ReloadRoutine());
+        
+    }
+
+    //corrutina
+
+    IEnumerator ShootRoutine()
+    {
+        //Corrutina se encarga de medir el tiempo entre disparos y la gestion del gasto de balas
+        // llamra al raycast de disparo defonodp en shoot()
+
+        canShoot = false; //llave de seguridad hace que si no estamos disparando no podamos disparar
+        if (!allowButtonHold) shooting = false; //cerrar el bucle de disparo por pulsacion
+        for (int i = 0; i < bulletsPerTap; i++)
+        {
+            if (bulletsLeft <= 0) break; //cuando te quedas sin balas pero sigues en el bucle de disparo / si no me quedan balas no hago daño
+            Shoot(); //llamada al raycast que define el disparo
+            bulletsLeft--; //resta 1 a la cantidad de balas del cargador actual
+        }
+           
+        //espera entre disparos
+        yield return new WaitForSeconds(shootingCooldown); //tiempo entre disparos
+        canShoot = true; //resetea la posibilidad de disparar
+        
+    }
+
+
+  IEnumerator ReloadRoutine()
+  { 
+    reloading = true; // estamos recargando, por lo tanto no podemos recargar
+    // AQUI LLAMARAMOS A LA ANIMACION DE RECARGA
+    yield return new WaitForSeconds(reloadTime); //esperar tanto tiempo como dura la animacion de recarga
+        bulletsLeft = ammoSize; //cantidad de balas actuales se iguala a la maxima
+        reloading = false;
+        
+  }
+
+
+
 
 
     #region Input Methods
 
     public void OnShoot(InputAction.CallbackContext context)
     {
+        if (allowButtonHold)
+        {
+            shooting = context.ReadValueAsButton(); //Detecta constantemente si el botton de disparo esta apretado
+
+        }
+
+        else
+        { 
+            if (context.performed) shooting = true; //shooting solo es true por pulsacion
         
+        }
     }
+
+
 
     public void OnReload(InputAction.CallbackContext context)
     {
-
+        if (context.performed) Reload();
     }
 
     #endregion
