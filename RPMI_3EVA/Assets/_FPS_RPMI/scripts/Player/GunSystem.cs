@@ -80,7 +80,13 @@ public class GunSystem : MonoBehaviour
 
             //AQUI PUEDO CODEAR TODOS LOS EFECTOS QUE QUIERO PARA INTERCACION
             Debug.Log(hit.collider.name); //nombre de objeto que dice que ha impactado
-
+            if (hit.collider.CompareTag("Enemy"))
+            { 
+                EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
+                enemyHealth.TakeDamage(damage);
+            }
+            
+           
         }
 
     }
