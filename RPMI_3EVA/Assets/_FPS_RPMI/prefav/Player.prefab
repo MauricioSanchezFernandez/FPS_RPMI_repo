@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 5898655160825636990}
   - component: {fileID: 704562417094818119}
   - component: {fileID: 8239260157882064781}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -293,6 +293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunSystem
   fpsCam: {fileID: 2355448817625940912}
+  shootPoint: {fileID: 0}
   impactLayer:
     serializedVersion: 2
     m_Bits: 64
