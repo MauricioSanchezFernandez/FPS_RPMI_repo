@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class GunSystem : MonoBehaviour
 {
+    //clase
 
     #region General Variables
     [Header("General References")]

@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class FPController : MonoBehaviour
 {
+    //clase
 
     #region General Variables
     [Header("Movement and look")]
